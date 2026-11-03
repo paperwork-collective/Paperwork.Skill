@@ -1,0 +1,20 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "paperwork-skill",
+  "description": "Paperwork skill for Claude Code — author and generate PDF documents using the Paperwork CLI",
+  "owner": {
+    "name": "paperwork-collective"
+  },
+  "plugins": [
+    {
+      "name": "paperwork",
+      "description": "Create reusable PDF document templates (reports, invoices, certificates, letters) and generate documents from them using the Paperwork CLI. Supports field and data bindings, configurable per-run, with output routing to local folders or any file service.",
+      "author": {
+        "name": "paperwork-collective"
+      },
+      "source": "./plugins/paperwork",
+      "category": "productivity",
+      "homepage": "https://github.com/paperwork-collective/Paperwork.Skill"
+    }
+  ]
+}

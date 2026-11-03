@@ -1,0 +1,10 @@
+{
+  "name": "paperwork",
+  "description": "Create reusable PDF document templates (reports, invoices, certificates, letters) and generate documents from them using the Paperwork CLI. Supports field and data bindings, configurable per-run, with output routing to local folders or any file service.",
+  "version": "1.0.0",
+  "author": {
+    "name": "paperwork-collective"
+  },
+  "homepage": "https://github.com/paperwork-collective/Paperwork.Skill",
+  "repository": "https://github.com/paperwork-collective/Paperwork.Skill"
+}
