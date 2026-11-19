@@ -106,11 +106,41 @@ paperwork generate --config ./templates/<name>/<name>.json \
 
 ### Step 1 — Find the template
 
-Search in order:
+A template is either **on this machine** or **published** in Paperwork. Decide which from the
+user's words before searching: "my invoice template", "the one in the repo" and a path all mean
+local; "our", "the team's", "published", a collection name, or an id with a colon in it
+(`acme:monthly-report`) mean published.
+
+**On this machine** — search in order:
 1. `./templates/<name>/` (project-local)
 2. `~/.paperwork/templates/<name>/` (global)
 
-If not found, ask the user for the path.
+Then run with `--config <path>`.
+
+**Published** — run with `--template <id>`, and no `--config`:
+
+| Where it was published | Command | Sign-in |
+|---|---|---|
+| Public library | `paperwork generate --template <owner>:<slug>` | none |
+| The user's own, personal scope | `paperwork generate --template <owner>:<slug> --personal` | `paperwork login` |
+| A collection | `paperwork generate --collection <org>:<slug> --template <id>` | `paperwork login`, as a member of that collection |
+
+`--template`, `--config` and `--layout` are mutually exclusive — one source only.
+
+To find the id, list what the user can reach (add `--json` to read it in a script):
+
+```bash
+paperwork list --personal                      # the user's own
+paperwork list --public --owner <owner-id>     # one owner's public templates
+paperwork list --private --collection <org>:<slug>   # a collection's
+```
+
+If a command answers that sign-in is needed, tell the user to run `paperwork login` themselves
+and wait — it opens a browser and only they can complete it. Never try to sign in on their
+behalf, and never ask for their password.
+
+If you cannot tell whether a template is local or published, ask. Running the wrong one silently
+produces a document from the wrong template.
 
 ### Step 2 — Extract overrides from context
 
@@ -173,8 +203,13 @@ paperwork generate --config ./templates/monthly-report/monthly-report.json \
 
 | Flag | Description |
 |---|---|
-| `--config <file>` | TemplateConfigV1 JSON config (mutually exclusive with `--layout`) |
+| `--config <file>` | TemplateConfigV1 JSON config on this machine |
 | `--layout <file>` | HTML layout file (inline mode, no config) |
+| `--template <id>` | A published template, `<owner>:<slug>`. Mutually exclusive with `--config` and `--layout` |
+| `--personal` | With `--template`: the user's own personal-scope template. Needs `paperwork login` |
+| `--collection <id>` | With `--template`: a template published in that collection, e.g. `acme:reports`. Needs `paperwork login` as a member |
+| `--password-env <var>` | Set a password the reader needs to open the PDF (128-bit encryption), read from that environment variable. **Prefer this** — a password written into the command itself lands in the shell history |
+| `--password <value>` | The same, given directly. Only when the user has asked for it that way |
 | `--style <file>` | CSS file — `--layout` mode only, repeatable |
 | `--data <name>=<file>` | JSON data file, repeatable. In `--config` mode, overrides matching data source by name |
 | `--field <key>=<value>` | Scalar field override, repeatable |
